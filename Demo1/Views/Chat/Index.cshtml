@@ -1,0 +1,48 @@
+@{
+    ViewData["Title"] = "Chat";
+}
+
+<div id="chat-container">
+    <div id="messages" style="border: 1px solid #ccc; height: 500px; background-color: white; overflow-y: scroll; padding: 10px;"></div>
+    <div style="margin-top: 20px;">
+        <input id="userInput" type="text" placeholder="Your name" class="form-control mb-2" />
+        <input id="messageInput" type="text" placeholder="Enter message" class="form-control" />
+        <button id="sendButton" class="btn btn-primary mt-2">Send</button>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.4/signalr.min.js"></script>
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withURL("/ChatHub")
+        .build();
+    const messagesDiv = document.getElementById("messages");
+    const messageInput = document.getElementById("messageInput");
+    const userInput = document.getElementById("userInput");
+    const sendButton = document.getElementById("sendButton");
+
+    connection.on("ReceiveMessage", (user, message) => {
+        const messageElement = document.createElement("div");
+        messageElement.textContent = `${user}:  ${message}`;
+        messagesDiv.appendChild(messageElement);
+    });
+
+    sendButton.addEventListener("click", async () => {
+        const user = userInput.value || "Anonymous";
+        const message = messageInput.value;
+        if (message) {
+            await connection.invoke("SendMessage", user, message);
+            messageInput.value = "";
+        }
+    });
+    connection.start().catch(err => console.error(err.toString()));
+</script>
+<style>
+    .message-container {
+        border: 1px solid #ccc;
+        height: 500px;
+        overflow-y: scroll;
+        padding: 10px;
+        background-color: white;
+    }
+</style>
