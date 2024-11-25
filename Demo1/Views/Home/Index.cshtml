@@ -1,0 +1,132 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="row mb-4">
+            <!-- Current Courses Section -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        Current Courses
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-outline-primary">Find first available time</button>
+                        <div class="mt-3">
+                            <label for="course-subject">Schedule a session for:</label>
+                            <select id="course-subject" class="form-select">
+                                <option selected>Choose a subject</option>
+                                <!-- Examples -->
+                                <!--<option value="math">Trigonometry</option>-->
+                                <!--<option value="math">Calculus 1</option>-->
+                                <!--<option value="science">Physics</option>-->
+                                <!--<option value="computer science">Data Structures and Algorithms</option>-->
+                                <!-- Add more subjects as needed -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Calendar Section -->
+            <div class="col-md-6 text-center">
+                <div class="card">
+                    <div class="card-header">
+                        <button class="btn btn-light">&lt;</button>
+                        <span>Nov 2024</span>
+                        <button class="btn btn-light">&gt;</button>
+                    </div>
+                    <div class="card-body">
+                        <div id="calendar">Calendar</div>
+                        <div class="mui-panel schedPanel">
+                            <!-- if a student (or consultant), show upcoming appointments -->
+                            <div id="classSched" role="region" aria-labelledby="dp4" aria-live="polite">
+                                <h2 class="plain scheduleOptions">
+                                    <span tabindex="0" id="dp4" role="heading" aria-level="2" aria-expanded="false" aria-live="polite" style="cursor: pointer; text-decoration-style: dotted;" data-date-format="yyyy-mm-dd" data-date="2024-11-04"></span>
+                                </h2>
+                                <div id="calendarDays" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;"></div>
+                                <style>
+                                    .highlight {
+                                        background-color: yellow;
+                                    }
+                                    
+                                    .day {
+                                        border: 1px solid #ccc;
+                                        padding: 10px;
+                                        text-align: left;
+                                        height: 50px;
+                                        position: relative;
+                                    }
+                                </style>
+                                <script type="text/javascript">
+                                    let currentDate = new Date(2024, 10, 1); // November 2024
+                                    const today = new Date(); // Current date
+                                    
+                                    function renderCalendar() {
+                                        const monthDays = document.getElementById('calendarDays');
+                                        monthDays.innerHTML = '';
+                                        const month = currentDate.getMonth();
+                                        const year = currentDate.getFullYear();
+                                        const firstDay = new Date(year, month, 1).getDay();
+                                        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                                        for (let i = 0; i < firstDay; i++) {
+                                            monthDays.innerHTML += '<div class="day"></div>';
+                                        }
+
+                                        for (let day = 1; day <= daysInMonth; day++) {
+                                            const hasAppointment = (day === 4 || day === 5); // Example days with appointments
+                                            monthDays.innerHTML += `<div class="day ${hasAppointment ? 'highlight' : ''}">${day}</div>`;
+                                        }
+
+                                        document.getElementById('currentMonth').innerText = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+                                    }
+
+                                    function prevMonth() {
+                                        const today = new Date();
+                                        if (currentDate.getFullYear() === today.getFullYear() && currentDate.getMonth() === today.getMonth()) {
+                                            return; // Prevent going to previous month if it's the current month
+                                        }
+                                        currentDate.setMonth(currentDate.getMonth() - 1);
+                                        renderCalendar();
+                                    }
+
+                                    function nextMonth() {
+                                        const today = new Date();
+                                        if (currentDate.getFullYear() === today.getFullYear() && currentDate.getMonth() === today.getMonth()) {
+                                            return; // Prevent going to previous month if it's the current month
+                                        }
+                                        if (currentDate.getMonth() == 11) { //December
+                                            currentDate.setFullYear(currentDate.getFullYear() + 1);
+                                            currentDate.setMonth(0); // January
+                                        } else {
+                                            currentDate.setMonth(currentDate.getMonth() + 1);
+                                        }
+                                        renderCalendar();
+                                    }
+
+                                    document.addEventListener('DOMContentLoaded', renderCalendar);
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Cancellation Instructions -->
+        <div class="row mb-4" text-left>
+            <div class="col-md-8">
+                <div class="alert alert-info">
+                    <strong>Need to cancel?</strong><br />Use the calendar to locate your upcoming session(s).
+                    Click the X in the top right corner of the highlighted box. It will ask you if you’d
+                    like to cancel that appointment or all scheduled for that day.
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<style>
+    .alert-info {
+        background-color: #38bcff;
+    }
+</style>
