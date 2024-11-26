@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241116225413_AddFullName")]
+    [Migration("20241116225413_AddFirstandLastNames")]
     partial class AddFullName
     {
         /// <inheritdoc />
@@ -44,7 +44,11 @@ namespace Demo1.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
