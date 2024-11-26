@@ -77,13 +77,18 @@ namespace Demo1.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "Full name")]
-            public string FullName { get; set; }
+            [Display(Name = "First name")]
+            public string FirstName { get; set; }
 
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "YSU ID")]
-            public string YSUId { get; set; }
+            [Display(Name = "Last name")]
+            public string LastName { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Student ID")]
+            public string StudentId { get; set; }
 
             [Required]
             [EmailAddress]
@@ -117,8 +122,9 @@ namespace Demo1.Areas.Identity.Pages.Account
             {
                 var user = new AppUser
                 {
-                    FullName = Input.FullName,
-                    YSUId = Input.YSUId,
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName,
+                    StudentId = Input.StudentId,
                     UserName = Input.Email,
                     Email = Input.Email,
                 };
