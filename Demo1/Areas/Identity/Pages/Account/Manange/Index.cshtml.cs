@@ -81,7 +81,8 @@ namespace Demo1.Areas.Identity.Pages.Account.Manage
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
-                FullName = user.FullName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 YSUId = user.YSUId
             };
         }
@@ -123,14 +124,19 @@ namespace Demo1.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            if (Input.FullName != user.FullName)
+            if (Input.FullName != user.FirstName)
             {
-                user.FullName = Input.FullName;
+                user.FullName = Input.FirstName;
             }
 
-            if (Input.YSUId != user.YSUId)
+            if (Input.FullName != user.LastName)
             {
-                user.YSUId = Input.YSUId;
+                user.FullName = Input.LastName;
+            }
+
+            if (Input.YSUId != user.StudentId)
+            {
+                user.YSUId = Input.StudentId;
             }
 
             await _userManager.UpdateNormalizedEmailAsync(user);
