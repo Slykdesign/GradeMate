@@ -5,13 +5,20 @@
 namespace Demo1.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddFullName : Migration
+    public partial class AddFirstandLastNames : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "FullName",
+                name: "FirstName",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "LastName",
                 table: "AspNetUsers",
                 type: "nvarchar(max)",
                 nullable: false,
@@ -25,7 +32,7 @@ namespace Demo1.Data.Migrations
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
-                name: "YSUId",
+                name: "StudentId",
                 table: "AspNetUsers",
                 type: "nvarchar(max)",
                 nullable: false,
@@ -36,7 +43,11 @@ namespace Demo1.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "FullName",
+                name: "FirstName",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "LastName",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
@@ -44,7 +55,7 @@ namespace Demo1.Data.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "YSUId",
+                name: "StudentId",
                 table: "AspNetUsers");
         }
     }
