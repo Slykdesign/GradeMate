@@ -31,11 +31,17 @@
         const user = userInput.value || "Anonymous";
         const message = messageInput.value;
         if (message) {
-            await connection.invoke("SendMessage", user, message);
-            messageInput.value = "";
+            try {
+                await connection.invoke("SendMessage", user, message);
+                messageInput.value = "";
+            } catch (err) {
+                console.error("Error sending message: ", err);
+            }
         }
     });
-    connection.start().catch(err => console.error(err.toString()));
+    connection.start().then(() => {
+        sendButton.disabled = false;
+    }).catch(err => console.error(err.toString()));
 </script>
 <style>
     .message-container {
