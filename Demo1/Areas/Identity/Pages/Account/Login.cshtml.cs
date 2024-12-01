@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
@@ -75,8 +75,8 @@ namespace Demo1.Areas.Identity.Pages.Account
             public string Email { get; set; }
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "YSU ID")]
-            public string YSUId { get; set; }
+            [Display(Name = "Student ID")]
+            public string StudentId { get; set; }
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
