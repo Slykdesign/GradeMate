@@ -62,13 +62,18 @@ namespace Demo1.Areas.Identity.Pages.Account.Manage
 
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "Full name")]
-            public string FullName { get; set; }
+            [Display(Name = "First name")]
+            public string FirstName { get; set; }
 
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "YSU ID")]
-            public string YSUId { get; set; }
+            [Display(Name = "Last name")]
+            public string LastName { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Student ID")]
+            public string StudentId { get; set; }
         }
 
         private async Task LoadAsync(AppUser user)
@@ -83,7 +88,7 @@ namespace Demo1.Areas.Identity.Pages.Account.Manage
                 PhoneNumber = phoneNumber,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                YSUId = user.YSUId
+                StudentId = user.StudentId
             };
         }
 
@@ -124,19 +129,19 @@ namespace Demo1.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            if (Input.FullName != user.FirstName)
+            if (Input.FirstName != user.FirstName)
             {
-                user.FullName = Input.FirstName;
+                user.FirstName = Input.FirstName;
             }
 
-            if (Input.FullName != user.LastName)
+            if (Input.LastName != user.LastName)
             {
-                user.FullName = Input.LastName;
+                user.LastName = Input.LastName;
             }
 
-            if (Input.YSUId != user.StudentId)
+            if (Input.StudentId != user.StudentId)
             {
-                user.YSUId = Input.StudentId;
+                user.StudentId = Input.StudentId;
             }
 
             await _userManager.UpdateNormalizedEmailAsync(user);
