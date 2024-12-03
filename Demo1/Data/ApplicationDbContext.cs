@@ -10,6 +10,5 @@ namespace Demo1.Data
             : base(options)
         {
         }
-        public DbSet<IdentityUser> Students { get; set; }
     }
 }
