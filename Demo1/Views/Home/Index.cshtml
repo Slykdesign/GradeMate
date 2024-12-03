@@ -75,7 +75,16 @@
 
                                         for (let day = 1; day <= daysInMonth; day++) {
                                             const hasAppointment = (day === 4 || day === 5); // Example days with appointments
-                                            monthDays.innerHTML += `<div class="day ${hasAppointment ? 'highlight' : ''}">${day}</div>`;
+                                            const dayDiv = document.createElement('div');
+                                            dayDiv.className = `day ${hasAppointment ? 'highlight' : ''}`;
+                                            dayDiv.innerText = day;
+
+                                            // Add click event listener
+                                            dayDiv.addEventListener('click', function() {
+                                                alert(`You clicked on day ${day}`);
+                                            // Here you can add more functionality, such as opening a modal to manage appointments
+                                            });
+                                            monthDays.appendChild(dayDiv);
                                         }
 
                                         document.getElementById('currentMonth').innerText = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
