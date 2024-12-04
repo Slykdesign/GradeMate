@@ -10,6 +10,8 @@
     </div>
     <input id="userInput" type="text" placeholder="Your name" class="form-control mb-2" />
     <input id="messageInput" type="text" placeholder="Enter message" class="form-control" />
+    <!--upload image option-->
+    <input id="imageInput" type="file" accept="image/*" class="form-control mb-2" />
     <button id="sendButton" class="btn btn-primary mt-2">Send</button>
 </div>
 
@@ -23,6 +25,7 @@
     const messageInput = document.getElementById("messageInput");
     const userInput = document.getElementById("userInput");
     const userIdInput = document.getElementById("userIdInput");
+    const imageInput = document.getElementById("imageInput");
     const sendButton = document.getElementById("sendButton");
 
     connection.on("ReceiveMessage", (user, message) => {
@@ -35,13 +38,26 @@
         const userId = userIdInput.value || "Unknown user";
         const user = userInput.value || "Anonymous";
         const message = messageInput.value;
-        if (message) {
+        const imageFile = imageInput.files[0];
+        if (message || imageFile) {
             try {
+                if (imageFile) {
+                    // Handle image upload logic here
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imgElement = document.createElement("img");
+                        imgElement.src = e.target.result;
+                        imgElement.style.maxWidth = "1000px"; // Limit image size
+                        messagesDiv.appendChild(imgElement);
+                    };
+                    reader.readAsDataURL(imageFile);
+                }
                 await connection.invoke("SendMessage", user, message);
                 const sentMessageElement = document.createElement("div");
                 sentMessageElement.textContent = `You to ${userId}: ${message}`;
                 messagesDiv.appendChild(sentMessageElement);
                 messageInput.value = "";
+                imageInput.value = ""; //Clear file output
             } catch (err) {
                 console.error("Error sending message: ", err);
             }
