@@ -32,7 +32,7 @@
                 <div class="card">
                     <div class="card-header">
                         <button class="btn btn-light">&lt;</button>
-                        <span>Nov 2024</span>
+                        <span>Dec 2024</span>
                         <button class="btn btn-light">&gt;</button>
                     </div>
                     <div class="card-body">
@@ -48,13 +48,15 @@
                                     .highlight {
                                         background-color: yellow;
                                     }
-                                    
                                     .day {
                                         border: 1px solid #ccc;
                                         padding: 10px;
                                         text-align: left;
                                         height: 50px;
                                         position: relative;
+                                    }
+                                    .day:hover {
+                                        border: 2px solid black; /* Bold outline on hover */
                                     }
                                 </style>
                                 <script type="text/javascript">
@@ -68,25 +70,105 @@
                                         const year = currentDate.getFullYear();
                                         const firstDay = new Date(year, month, 1).getDay();
                                         const daysInMonth = new Date(year, month + 1, 0).getDate();
+                                        const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                                        const scheduledSessions = {2: ['Algorithm 3 PM'], 3: ['Software Engineering 2 PM',
+                                        'American Sign Language at 5 PM'], 5: ['Software Engineering 2 PM',
+                                        'American Sign Language at 5 PM'], 6: ['Algorithm 3 PM'], 9: ['Algorithm 3 PM'],
+                                        10: ['Software Engineering 2 PM', 'American Sign Language at 5 PM'], 12:
+                                        ['Software Engineering 2 PM', 'American Sign Language at 5 PM'], 13:
+                                        ['Algorithm 3 PM'], 16: ['Algorithm 3 PM'], 17: ['Software Engineering 2 PM',
+                                        'American Sign Language at 5 PM'], 19: ['Software Engineering 2 PM',
+                                        'American Sign Language at 5 PM'], 20: ['Algorithm 3 PM'], 23: ['Algorithm 3 PM'],
+                                        24: ['Software Engineering 2 PM', 'American Sign Language at 5 PM'], 26:
+                                        ['Software Engineering 2 PM', 'American Sign Language at 5 PM'],
+                                        27: ['Algorithm 3 PM'], 30: ['Algorithm 3 PM'], 31: ['Software Engineering 2 PM',
+                                        'American Sign Language at 5 PM'],
+                                        }
+
+                                        weekdays.forEach(weekday => {
+                                            const weekdayDiv = document.createElement('div');
+                                            weekdayDiv.className = 'day';
+                                            weekdayDiv.innerText = weekday;
+                                            monthDays.appendChild(weekdayDiv);
+                                        });
 
                                         for (let i = 0; i < firstDay; i++) {
                                             monthDays.innerHTML += '<div class="day"></div>';
                                         }
 
                                         for (let day = 1; day <= daysInMonth; day++) {
-                                            const hasAppointment = (day === 4 || day === 5); // Example days with appointments
                                             const dayDiv = document.createElement('div');
+                                            const hasAppointment = scheduledSessions[day] && scheduledSessions[day].length > 0; // Define hasAppointment
                                             dayDiv.className = `day ${hasAppointment ? 'highlight' : ''}`;
                                             dayDiv.innerText = day;
+
+                                            //Click event listener to toggle highlight
+                                            dayDiv.addEventListener('click', function() {
+                                                dayDiv.classList.toggle('highlight');
+                                                const sessionList = scheduledSessions[day] ? scheduledSessions[day].map(session => `<li>${session}</li>`).join('') : 'No sessions available.';
+                                                alert (`Session on ${day}: \n${sessionList}`);
+                                            });
+
+                                            //Mouseover event listener to toggle highlight
+                                            dayDiv.addEventListener('mouseover', function() {
+                                                const sessionList = scheduledSessions[day] ? scheduledSessions[day].map(session => `<li>${session}</li>`).join('') : 'No sessions available.';
+                                                const tooltip = document.createElement('div');
+                                                tooltip.className = 'tooltip';
+                                                tooltip.innerHTML = sessionList;
+                                                tooltip.style.top = `${event.clientY}px`;
+                                                tooltip.style.left = `${event.clientX}px`;
+                                                document.appendChild(tooltip);
+                                                tooltip.style.display = 'block';
+                                            });
+
+                                            //mouseout event listener to toggle highlight
+                                            dayDiv.addEventListener('mouseout', function() {
+                                                const tooltip = document.querySelector('.tooltip');
+                                                if (tooltip) {
+                                                    tooltip.style.display = 'none'; // Hide tooltip
+                                                    document.body.removeChild(tooltip); // Remove tooltip from DOM
+                                                }
+                                            });
+                                            
+                                            // Remove tooltip on mouseout
+                                            dayDiv.addEventListener('mouseout', function() {
+                                                const tooltip = dayDiv.querySelector('.tooltip');
+                                                if (tooltip) {
+                                                    dayDiv.removeChild(tooltip);
+                                                }
+                                            });
+
+                                            if (hasAppointment) {
+                                                dayDiv.addEventListener('click', function() {
+                                                    const sessionList = scheduledSessions[day].map(session => `<li>${session}</li>`).join('');
+                                                    alert(`Sessions on ${day}: \n${sessionList}`);
+                                                });
+                                            }
+                                            
+                                            if (hasAppointment) {
+                                                const cancelButton = document.createElement('span');
+                                                cancelButton.innerText = 'X';
+                                                cancelButton.style.color = 'red';
+                                                cancelButton.style.cursor = 'pointer';
+                                                cancelButton.style.position = 'absolute';
+                                                cancelButton.style.top = '5px';
+                                                cancelButton.style.right = '5px';
+                                                cancelButton.onclick = function(event) {
+                                                    event.stopPropagation(); // Prevent triggering the day click event
+                                                    if (confirm(`Are you sure you want to cancel the session on ${day}?`)) {
+                                                        dayDiv.classList.remove('highlight'); // Remove highlight
+                                                    }
+                                                };
+                                                dayDiv.appendChild(cancelButton);
+                                            }
 
                                             // Add click event listener
                                             dayDiv.addEventListener('click', function() {
                                                 alert(`You clicked on day ${day}`);
-                                            // Here you can add more functionality, such as opening a modal to manage appointments
+                                                // Here you can add more functionality, such as opening a modal to manage appointments
                                             });
                                             monthDays.appendChild(dayDiv);
-                                        }
-
+                                        }   
                                         document.getElementById('currentMonth').innerText = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
                                     }
 
@@ -118,6 +200,7 @@
                             </div>
                         </div>
                     </div>
+  
                 </div>
             </div>
         </div>
@@ -136,5 +219,15 @@
 <style>
     .alert-info {
         background-color: #38bcff;
+    }
+    tooltip {
+        position: absolute;
+        background-color: #e0ff9e;
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        display: none; /* Initially hidden */
     }
 </style>
