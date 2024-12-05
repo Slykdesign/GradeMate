@@ -139,13 +139,6 @@
                                                     dayDiv.removeChild(tooltip);
                                                 }
                                             });
-
-                                            if (hasAppointment) {
-                                                dayDiv.addEventListener('click', function() {
-                                                    const sessionList = scheduledSessions[day].map(session => `<li>${session}</li>`).join('');
-                                                    alert(`Sessions on ${day}: \n${sessionList}`);
-                                                });
-                                            }
                                             
                                             if (hasAppointment) {
                                                 const cancelButton = document.createElement('span');
