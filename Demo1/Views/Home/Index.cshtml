@@ -43,6 +43,7 @@
                                     .highlight {
                                         background-color: yellow;
                                     }
+
                                     .day {
                                         border: 1px solid #ccc;
                                         padding: 10px;
@@ -50,25 +51,28 @@
                                         height: 50px;
                                         position: relative;
                                     }
-                                    .day:hover {
-                                        border: 2px solid black; /* Bold outline on hover */
-                                    }
-                                    .day.disabled {
-                                        pointer-events: none;
-                                        background-color: #f2f2f2;
-                                        color: #ccc;
-                                        cursor: not-allowed;
-                                    }
-                                    .day.scheduled {
-                                        background-color: yellow;
-                                    }
+
+                                        .day:hover {
+                                            border: 2px solid black; /* Bold outline on hover */
+                                        }
+
+                                        .day.disabled {
+                                            pointer-events: none;
+                                            background-color: #f2f2f2;
+                                            color: #ccc;
+                                            cursor: not-allowed;
+                                        }
+
+                                        .day.scheduled {
+                                            background-color: yellow;
+                                        }
                                 </style>
                                 <script type="text/javascript">
                                     let currentDate = new Date(2024, 11, 1); // December 2024
                                     const today = new Date(); // Current date
 
                                     document.getElementById('course-subject').addEventListener('change', renderCalendar);
-                                    
+
                                     function renderCalendar() {
                                         const monthDays = document.getElementById('calendarDays');
                                         monthDays.innerHTML = ''; // Clear previous calendar
@@ -76,13 +80,14 @@
                                         const year = currentDate.getFullYear();
                                         const firstDay = new Date(year, month, 1).getDay();
                                         const daysInMonth = new Date(year, month + 1, 0).getDate();
-                                        const scheduledSessions = {5: ['Software Engineering 2 PM', 'American Sign Language 5 PM'], 6: ['Algorithm 3 PM'],
-                                        9: ['Algorithm 3 PM'], 10: ['Software Engineering 2 PM', 'American Sign Language 5 PM'],
-                                        12: ['Software Engineering 2 PM', 'American Sign Language 5 PM'], 13: ['Algorithm 3 PM'], 16: ['Algorithm 3 PM'],
-                                        17: ['Software Engineering 2 PM', 'American Sign Language 5 PM'], 19: ['Software Engineering 2 PM',
-                                        'American Sign Language 5 PM'], 20: ['Algorithm 3 PM'], 23: ['Algorithm 3 PM'], 24: ['Software Engineering 2 PM',
-                                        'American Sign Language 5 PM'], 26: ['Software Engineering 2 PM', 'American Sign Language 5 PM'], 27: ['Algorithm 3 PM'],
-                                        30: ['Algorithm 3 PM'], 31: ['Software Engineering 2 PM', 'American Sign Language at 5 PM'],
+                                        const scheduledSessions = {9: ['Algorithm 3 PM'], 10: ['Software Engineering 2 PM',
+                                        'American Sign Language 5 PM'], 12: ['Software Engineering 2 PM', 'American Sign Language 5 PM'],
+                                        13: ['Algorithm 3 PM'], 16: ['Algorithm 3 PM'], 17: ['Software Engineering 2 PM',
+                                        'American Sign Language 5 PM'], 19: ['Software Engineering 2 PM', 'American Sign Language 5 PM'],
+                                        20: ['Algorithm 3 PM'], 23: ['Algorithm 3 PM'], 24: ['Software Engineering 2 PM',
+                                        'American Sign Language 5 PM'], 26: ['Software Engineering 2 PM', 'American Sign Language 5 PM'],
+                                        27: ['Algorithm 3 PM'], 30: ['Algorithm 3 PM'], 31: ['Software Engineering 2 PM',
+                                        'American Sign Language at 5 PM']
                                         }
 
                                         for (let i = 0; i < firstDay; i++) {
@@ -99,27 +104,33 @@
                                             dayDiv.innerText = day;
 
                                             // Disable click if no course is selected or no appointment exists
-                                            dayDiv.style.pointerEvents = (hasAppointment && document.getElementById('course-subject').value !== "Choose a subject") ? 'auto' : 'none';
-                                            dayDiv.style.cursor = (hasAppointment && document.getElementById('course-subject').value !== "Choose a subject") ? 'pointer' : 'not-allowed';
+                                            const selectedCourse = document.getElementById('course-subject').value;
+                                            dayDiv.style.pointerEvents = (hasAppointment && selectedCourse !== "Choose a subject") ? 'auto' : 'none';
+                                            dayDiv.style.cursor = (hasAppointment && selectedCourse !== "Choose a subject") ? 'pointer' : 'not-allowed';
 
                                             //Click event listener to toggle highlight
                                             dayDiv.addEventListener('click', function() {
                                                 if (hasAppointment) {
                                                     dayDiv.classList.toggle('highlight');
-                                                    const sessionList = scheduledSessions[day].map(session => `<li>${session}</li>`).join('');
+                                                    const sessionList = scheduledSessions[day].map(session => {
+                                                        return session.includes(selectedCourse) ? `<strong>${session}</strong>` : session;
+                                                    }).join('');
                                                     alert(`Sessions on ${day}: \n${sessionList}`);
                                                 }
                                             });
 
                                             //Mouseover event listener to toggle highlight
                                             dayDiv.addEventListener('mouseover', function() {
-                                                const sessionList = scheduledSessions[day] ? scheduledSessions[day].map(session => `<li>${session}</li>`).join('') : 'No sessions available.';
+                                                const sessionList = scheduledSessions[day] ? scheduledSessions[day].map(session => {
+                                                    // Bold the session if it matches the selected course
+                                                    return session.includes(selectedCourse) ? `<strong>${session}</strong>` : session;
+                                                }).join('') : 'No sessions available.';
                                                 const tooltip = document.createElement('div');
                                                 tooltip.className = 'tooltip';
                                                 tooltip.innerHTML = sessionList;
                                                 tooltip.style.top = `${event.clientY}px`;
                                                 tooltip.style.left = `${event.clientX}px`;
-                                                document.appendChild(tooltip);
+                                                document.body.appendChild(tooltip);
                                                 tooltip.style.display = 'block';
                                             });
 
@@ -131,7 +142,7 @@
                                                     document.body.removeChild(tooltip);
                                                 }
                                             });
-                                            
+
                                             // Remove tooltip on mouseout
                                             dayDiv.addEventListener('mouseout', function() {
                                                 const tooltip = dayDiv.querySelector('.tooltip');
@@ -139,7 +150,7 @@
                                                     dayDiv.removeChild(tooltip);
                                                 }
                                             });
-                                            
+
                                             if (hasAppointment) {
                                                 const cancelButton = document.createElement('span');
                                                 cancelButton.innerText = 'X';
@@ -163,7 +174,7 @@
                                                 // Here you can add more functionality, such as opening a modal to manage appointments
                                             });
                                             monthDays.appendChild(dayDiv);
-                                        }   
+                                        }
                                         document.getElementById('currentMonth').innerText = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
                                     }
 
@@ -172,7 +183,7 @@
                             </div>
                         </div>
                     </div>
-  
+
                 </div>
             </div>
         </div>
@@ -192,7 +203,8 @@
     .alert-info {
         background-color: #38bcff;
     }
-    tooltip {
+
+    .tooltip {
         position: absolute;
         background-color: #e0ff9e;
         border: 1px solid #ccc;
