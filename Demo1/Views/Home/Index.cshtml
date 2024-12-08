@@ -43,7 +43,6 @@
                                     .highlight {
                                         background-color: yellow;
                                     }
-
                                     .day {
                                         border: 1px solid #ccc;
                                         padding: 10px;
@@ -51,21 +50,18 @@
                                         height: 50px;
                                         position: relative;
                                     }
-
-                                        .day:hover {
-                                            border: 2px solid black; /* Bold outline on hover */
-                                        }
-
-                                        .day.disabled {
-                                            pointer-events: none;
-                                            background-color: #f2f2f2;
-                                            color: #ccc;
-                                            cursor: not-allowed;
-                                        }
-
-                                        .day.scheduled {
-                                            background-color: yellow;
-                                        }
+                                    .day:hover {
+                                        border: 2px solid black; /* Bold outline on hover */
+                                    }
+                                    .day.disabled {
+                                        pointer-events: none;
+                                        background-color: #f2f2f2;
+                                        color: #ccc;
+                                        cursor: not-allowed;
+                                    }
+                                    .day.scheduled {
+                                        background-color: yellow;
+                                    }
                                 </style>
                                 <script type="text/javascript">
                                     let currentDate = new Date(2024, 11, 1); // December 2024
@@ -88,7 +84,7 @@
                                         'American Sign Language 5 PM'], 26: ['Software Engineering 2 PM', 'American Sign Language 5 PM'],
                                         27: ['Algorithm 3 PM'], 30: ['Algorithm 3 PM'], 31: ['Software Engineering 2 PM',
                                         'American Sign Language at 5 PM']
-                                        }
+                                        };
 
                                         for (let i = 0; i < firstDay; i++) {
                                             monthDays.innerHTML += '<div class="day"></div>';
@@ -97,17 +93,14 @@
                                         for (let day = 1; day <= daysInMonth; day++) {
                                             const dayDiv = document.createElement('div');
                                             const hasAppointment = scheduledSessions[day] && scheduledSessions[day].length > 0;
-                                            if (hasAppointment) {
-                                                dayDiv.classList.add('highlight');
-                                            }
-                                            dayDiv.className = `day ${hasAppointment ? 'highlight' : ''}`;
+                                            dayDiv.className = 'day';
                                             dayDiv.innerText = day;
 
                                             // Disable click if no course is selected or no appointment exists
                                             const selectedCourse = document.getElementById('course-subject').value;
                                             dayDiv.style.pointerEvents = (hasAppointment && selectedCourse !== "Choose a subject") ? 'auto' : 'none';
                                             dayDiv.style.cursor = (hasAppointment && selectedCourse !== "Choose a subject") ? 'pointer' : 'not-allowed';
-
+                                            
                                             //Click event listener to toggle highlight
                                             dayDiv.addEventListener('click', function() {
                                                 if (hasAppointment) {
